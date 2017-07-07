@@ -1,0 +1,11 @@
+com\passmanage\bean\Users.class
+com\passmanage\controller\PassinfoController.class
+com\passmanage\service\impl\PassinfoServiceImpl.class
+com\passmanage\dao\PassinfoDao.class
+com\passmanage\controller\UsersController.class
+com\passmanage\bean\Passinfo.class
+com\passmanage\service\impl\UsersServiceImpl.class
+com\passmanage\vo\PassinfoVo.class
+com\passmanage\service\UsersService.class
+com\passmanage\service\PassinfoService.class
+com\passmanage\dao\UsersDao.class

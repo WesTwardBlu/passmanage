@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.passmanage.dao.PassinfoDao">
+
+  <resultMap id="BaseResultMap" type="com.passmanage.bean.Passinfo">
+    <id column="pid" jdbcType="INTEGER" property="pid" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="account" jdbcType="VARCHAR" property="account" />
+    <result column="password" jdbcType="VARCHAR" property="password" />
+    <result column="url" jdbcType="VARCHAR" property="url" />
+    <result column="comment" jdbcType="VARCHAR" property="comment" />
+    <result column="cid" jdbcType="INTEGER" property="cid" />
+    <result column="uid" jdbcType="INTEGER" property="uid" />
+  </resultMap>
+  
+  <resultMap id="MultiResultMap" type="com.passmanage.vo.PassinfoVo">
+    <id column="pid" jdbcType="INTEGER" property="pid" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="account" jdbcType="VARCHAR" property="account" />
+    <result column="password" jdbcType="VARCHAR" property="password" />
+    <result column="url" jdbcType="VARCHAR" property="url" />
+    <result column="comment" jdbcType="VARCHAR" property="comment" />
+    <result column="category" jdbcType="VARCHAR" property="category" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    pid, title, account, password, url, comment, cid, uid
+  </sql>
+  
+  <sql id="Multi_Column_List">
+    p.pid, p.title, p.account, p.password, p.url, p.comment,c.category 
+  </sql>
+  
+  
+  <!-- 查询所有信息，根据uid -->
+  <select id="selectAll" parameterType="int" resultMap="MultiResultMap">
+    select 
+    <include refid="Multi_Column_List" />
+    from passinfo p,users u,category c
+    where p.uid=u.uid and p.cid=c.cid and u.uid = #{uid,jdbcType=INTEGER}
+  </select>
+  
+  <!-- 查询所有信息，根据uid,cid -->
+  <select id="selectByCid"  resultMap="BaseResultMap">
+    select 
+    p.pid, p.title, p.account, p.password, p.url, p.comment
+    from passinfo p
+    where p.uid=#{0,jdbcType=INTEGER} and p.cid= #{1,jdbcType=INTEGER}
+  </select>
+  
+  
+  
+  <!-- 查询详细信息，根据pid -->
+  <select id="selectByPid" parameterType="int" resultMap="BaseResultMap">
+    select 
+    p.pid, p.title, p.account, p.password, p.url, p.comment,p.cid
+    from passinfo p where p.pid= #{pid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from passinfo
+    where pid = #{pid,jdbcType=INTEGER}
+  </delete>
+  
+  <insert id="insertPassinfo" parameterType="com.passmanage.bean.Passinfo">
+    insert into passinfo
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      pid,
+      <if test="title != null">
+        title,
+      </if>
+      <if test="account != null">
+        account,
+      </if>
+      <if test="password != null">
+        password,
+      </if>
+      <if test="url != null">
+        url,
+      </if>
+      <if test="comment != null">
+        comment,
+      </if>
+      <if test="cid != null">
+        cid,
+      </if>
+      <if test="uid != null">
+        uid,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      null,
+      <if test="title != null">
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="account != null">
+        #{account,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null">
+        #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="url != null">
+        #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="comment != null">
+        #{comment,jdbcType=VARCHAR},
+      </if>
+      <if test="cid != null">
+        #{cid,jdbcType=INTEGER},
+      </if>
+      <if test="uid != null">
+        #{uid,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  
+  <!-- 根据pid更新passinfo数据 -->
+  <update id="updatePassinfoByPid" parameterType="com.passmanage.bean.Passinfo">
+    update passinfo
+    set title = #{title,jdbcType=VARCHAR},
+      account = #{account,jdbcType=VARCHAR},
+      password = #{password,jdbcType=VARCHAR},
+      url = #{url,jdbcType=VARCHAR},
+      comment = #{comment,jdbcType=VARCHAR},
+      cid = #{cid,jdbcType=INTEGER},
+      uid = #{uid,jdbcType=INTEGER}
+    where pid = #{pid,jdbcType=INTEGER}
+  </update>
+</mapper>
